@@ -1,0 +1,10 @@
+#app {
+    /* font-family: 'Patrick Hand SC', cursive; */
+    /* font-size: 1.5em; */
+    background-color: whitesmoke;
+    min-height: 100vh;
+}
+a {
+    text-decoration: none;
+    color: rgba(27, 37, 116, 0.6);
+}
