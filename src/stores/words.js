@@ -1,14 +1,19 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import router from "@/router"
 import cookies from "vue-cookies";
+import { useUserStore } from "./user";
+
 
 
 // Add a usage sentence or word description
 //  so
 export const useWordStore = defineStore("words", {
+    
     state: () => ({
         userWords: [],
         wordsToAdd: [],
+
         wordInfo: null,
         successMessage: null,
         errMessage: null
@@ -17,6 +22,7 @@ export const useWordStore = defineStore("words", {
         // create a getter for the wordsToAdd(state) to update when a word is added to it
     },
     actions: {
+        // Get word info from dictionary API 
         async getDefinition(word){
             const stringWord = word.toString()
             await axios.request({
@@ -29,13 +35,17 @@ export const useWordStore = defineStore("words", {
                 this.errorResponse = error.response.data.title
             })
         },
+        // Add word to payload
+        // To be used in AddWords and Test Views
         addWordToGroup(word) {
             if (this.wordsToAdd.length <= 6) {
                 this.wordsToAdd.push(word);
             }
             },
-        async addWordsToDatabase(words){
-            await axios.request({
+        
+        addWordsToDatabase(words){
+            const { user } = useUserStore()
+            axios.request({
                 url: import.meta.env.VITE_API_URL+"words",
                 method: "POST",
                 params: {
@@ -45,8 +55,10 @@ export const useWordStore = defineStore("words", {
                     words
                 }
             }).then((response) => {
+                console.log(response)
                 this.wordsToAdd = []
-                this.successMessage = response.data
+                this.getUserWords()
+                router.push({name: "user", params: {userId: user.userId}})
             }).catch((error)=>{
                 this.errMessage = error.response
             })

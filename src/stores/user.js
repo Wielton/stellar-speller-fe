@@ -7,6 +7,10 @@ export const useUserStore = defineStore("user",{
   state: () => ({
     isLoading: false,
     userSession: cookies.get("sessionToken"),
+    loginForm: {
+      username: "",
+      password: ""
+    },
     user: {
       userId: null,
       username: null
@@ -16,8 +20,8 @@ export const useUserStore = defineStore("user",{
   }),
 
   actions: {
-    async getAuthentication() {
-      await axios.request({
+    getAuthentication() {
+      axios.request({
         url: import.meta.env.VITE_API_URL+"user",
         method: "GET",
         params: {
@@ -29,8 +33,8 @@ export const useUserStore = defineStore("user",{
         this.errMessage = err.data;
       })
     },
-    async signup(username,password) {
-      await axios.request({
+    signup(username,password) {
+      axios.request({
         url: import.meta.env.VITE_API_URL+"user",
         method: "POST",
         data: {
@@ -54,10 +58,8 @@ export const useUserStore = defineStore("user",{
           password
         }
       }).then((response) => {
-        console.log(response.data)
-        this.user.userId = response.data.userId
-        this.user.username = response.data.username
-        // console.log(this.user)
+        console.log(response)
+        this.user = response.data
         cookies.set("sessionToken", response.data.sessionToken);
         router.push({name: "user", params:{userId: this.user.userId}})
       }).catch((err) => {
@@ -65,8 +67,8 @@ export const useUserStore = defineStore("user",{
       })
       
     },
-    async logout() {
-      await axios.request({
+    logout() {
+      axios.request({
         url: import.meta.env.VITE_API_URL+"user-session",
         method: "DELETE",
         params: {

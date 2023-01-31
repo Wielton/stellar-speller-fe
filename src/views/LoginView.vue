@@ -1,12 +1,10 @@
 <script setup>
-import { ref } from "vue";
+import { storeToRefs } from "pinia";
 import { useUserStore } from "../stores/user";
 
 const userStore = useUserStore();
-
-const username = ref("");
-const password = ref("");
-
+const { loginForm } = storeToRefs(userStore);
+const { login } = userStore;
 // console.log(userStore.allUsernames);
 </script>
 <template>
@@ -23,14 +21,14 @@ const password = ref("");
         <v-card class="mx-auto" max-width="344" title="Stellar Speller">
           <v-container>
             <v-text-field
-              v-model="username"
+              v-model="loginForm.username"
               color="primary"
               label="Username"
               variant="underlined"
             ></v-text-field>
 
             <v-text-field
-              v-model="password"
+              v-model="loginForm.password"
               color="primary"
               label="Password"
               placeholder="Enter your password"
@@ -49,7 +47,7 @@ const password = ref("");
           <v-card-actions>
             <v-spacer></v-spacer>
 
-            <v-btn color="success" @click="userStore.login(username, password)">
+            <v-btn color="success" @click="login(loginForm.username, loginForm.password)">
               LOGIN
             </v-btn>
           </v-card-actions>

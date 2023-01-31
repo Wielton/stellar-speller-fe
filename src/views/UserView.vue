@@ -1,35 +1,33 @@
 <script setup>
-import { RouterLink } from "vue-router";
+import { storeToRefs } from "pinia";
 import { useUserStore } from "../stores/user";
 import { useWordStore } from "../stores/words";
+import { useTestStore } from "../stores/test";
 
-const wordStore = useWordStore();
-const userStore = useUserStore();
+const { getUserWords } = useWordStore();
+// const { userWords } = storeToRefs(useWordStore())
+const { user } = storeToRefs(useUserStore());
+const { logout } = useUserStore();
+const { filterTestWords } = useTestStore();
+
+getUserWords();
 </script>
 
 <template>
-  <v-container fluid>
-    <v-row>
-      <h3 v-if="userStore.user">Welcome {{ userStore.user.username }}!</h3>
-      <v-spacer />
-      <v-btn @click="userStore.logout()" rounded small flat>LOGOUT</v-btn>
-    </v-row>
-    <v-row>
-      <v-col>
-        <!-- Add router-links  -->
-        <v-btn :to="{ name: 'progress' }" @click="wordStore.getUserWords" flat
-          >PROGRESS</v-btn
-        >
-        |
-        <v-btn :to="{ name: 'test' }" flat @click="wordStore.getUserWords">TEST</v-btn>
-        |
-        <v-btn :to="{ name: 'addword' }" flat>ADD WORDS</v-btn>
-      </v-col>
-    </v-row>
-    <v-row>
+  <v-layout>
+    <v-main app>
+      <h3 v-if="user.userId != null">Welcome {{ user.username }}!</h3>
       <RouterView />
-    </v-row>
-  </v-container>
+    </v-main>
+
+    <v-bottom-navigation app>
+      <!-- Add router-links  -->
+      <v-btn :to="{ name: 'progress' }" flat>HOME</v-btn>
+      <v-btn :to="{ name: 'test' }" flat @click="filterTestWords()">TEST</v-btn>
+      <v-btn :to="{ name: 'addword' }" flat>ADD</v-btn>
+      <v-btn @click="logout()" rounded small flat>LOGOUT</v-btn>
+    </v-bottom-navigation>
+  </v-layout>
 </template>
 <style lang="css" scoped>
 .list {

@@ -23,7 +23,7 @@ const router = createRouter({
       },
       children: [
         {
-          path: "user/progress/",
+          path: "progress",
           name: "progress",
           // route level code-splitting
           // this generates a separate chunk (About.[hash].js) for this route
@@ -31,7 +31,7 @@ const router = createRouter({
           component: () => import("../views/MyProgressView.vue")
         },
         {
-          path: "user/test/",
+          path: "test",
           name: "test",
           // route level code-splitting
           // this generates a separate chunk (About.[hash].js) for this route
@@ -39,7 +39,7 @@ const router = createRouter({
           component: () => import("../views/TestView.vue")
         },
         {
-          path: "user/addword/",
+          path: "addword",
           name: "addword",
           // route level code-splitting
           // this generates a separate chunk (About.[hash].js) for this route
