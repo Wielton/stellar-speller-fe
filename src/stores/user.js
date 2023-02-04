@@ -58,7 +58,6 @@ export const useUserStore = defineStore("user",{
           password
         }
       }).then((response) => {
-        console.log(response)
         this.user = response.data
         cookies.set("sessionToken", response.data.sessionToken);
         router.push({name: "user", params:{userId: this.user.userId}})

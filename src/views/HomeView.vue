@@ -1,5 +1,4 @@
 <script setup>
-import { RouterLink } from "vue-router";
 import { useUserStore } from "../stores/user";
 
 const userStore = useUserStore();
@@ -9,7 +8,7 @@ const userStore = useUserStore();
   <v-container fluid>
     <v-row justify-center>
       <v-col cols="12" md="12" lg="12">
-        <h1>Welcome Back Stellar Speller</h1>
+        <h1>Stellar Speller</h1>
         <h3>Track your progress and perfect your spelling!</h3>
         <!-- This is a hack-way of  -->
         <v-btn v-if="!userStore.user.userId" :to="{ name: 'login' }">LOGIN</v-btn>

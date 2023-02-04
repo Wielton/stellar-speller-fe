@@ -1,16 +1,19 @@
 <script setup>
+import { onBeforeMount } from "vue";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "../stores/user";
 import { useWordStore } from "../stores/words";
-import { useTestStore } from "../stores/test";
+// import { useTestStore } from "../stores/test";
 
 const { getUserWords } = useWordStore();
 // const { userWords } = storeToRefs(useWordStore())
 const { user } = storeToRefs(useUserStore());
 const { logout } = useUserStore();
-const { filterTestWords } = useTestStore();
+// const { filterTestWords } = useTestStore();
 
-getUserWords();
+onBeforeMount(() => {
+  getUserWords();
+});
 </script>
 
 <template>
@@ -20,10 +23,10 @@ getUserWords();
       <RouterView />
     </v-main>
 
-    <v-bottom-navigation app>
+    <v-bottom-navigation app transparent>
       <!-- Add router-links  -->
-      <v-btn :to="{ name: 'progress' }" flat>HOME</v-btn>
-      <v-btn :to="{ name: 'test' }" flat @click="filterTestWords()">TEST</v-btn>
+      <v-btn :to="{ name: 'user' }" flat>HOME</v-btn>
+      <v-btn :to="{ name: 'test' }" flat>TEST</v-btn>
       <v-btn :to="{ name: 'addword' }" flat>ADD</v-btn>
       <v-btn @click="logout()" rounded small flat>LOGOUT</v-btn>
     </v-bottom-navigation>

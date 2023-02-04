@@ -1,24 +1,22 @@
-import { defineStore, storeToRefs } from "pinia";
+import { defineStore } from "pinia";
 import axios from "axios";
-import cookies from "vue-cookies";
+import router from "@/router"
 import { useWordStore } from "./words";
+
 
 
 
 // Add a usage sentence or word description
 //  so
 export const useTestStore = defineStore("test", {
+    
     state: () => ({
-        testWords: [],
-        wordGroups: [],
-        // answerFields: [
-        //     { answer: "", word: this.testWords.word, id: this.testWords.wordId},
-        //     { answer: "", word: this.testWords.word, id: this.testWords.wordId},
-        //     { answer: "", word: this.testWords.word, id: this.testWords.wordId},
-        //     { answer: "", word: this.testWords.word, id: this.testWords.wordId},
-        //     { answer: "", word: this.testWords.word, id: this.testWords.wordId},
-        //     { answer: "", word: this.testWords.word, id: this.testWords.wordId},
-        // ],
+        testWords: [{
+            groupId: null,
+            word: null,
+            wordId: null,
+            answer: null,
+        }],
         answersToAdd: [],
         successMessage: null,
         errMessage: null
@@ -45,27 +43,34 @@ export const useTestStore = defineStore("test", {
         
         
         // This function is in words.js
-        addWordToGroup(word) {
-            if (this.answersToAdd.length <= 6) {
-                this.answersToAdd.push(word);
+        addWordToGroup(word, wordId) {
+            const wordData = {
+                word: null,
+                wordId: null
             }
+                wordData.word = word
+                wordData.wordId = wordId
+                this.answersToAdd.push(wordData)
+                this.testWords = this.testWords.filter(word => word.answer != wordData.word);
+                console.log(this.answersToAdd)
+            },
+            removeWordFromGroup(item){
+                this.answersToAdd.slice(item)
             },
         
 
         // 
-        async addAnswersToDatabase(words){
+        async submitAnswers(){
             await axios.request({
                 url: import.meta.env.VITE_API_URL+"answers",
                 method: "POST",
-                params: {
-                    "sessionToken": cookies.get("sessionToken")
-                },
                 data: {
-                    words
+                    words: this.answersToAdd
                 }
             }).then((response) => {
                 this.answersToAdd = []
-                this.successMessage = response.data
+                this.successMessage = response
+                router.push({name: "user"})
             }).catch((error)=>{
                 this.errMessage = error.response
             })

@@ -2,6 +2,10 @@ import { createRouter, createWebHistory } from "vue-router";
 // import { storeToRefs } from "pinia";
 import {useUserStore} from "../stores/user";
 import HomeView from "../views/HomeView.vue";
+import UserView from "../views/UserView.vue";
+import MyProgressView from "../views/MyProgressView.vue";
+import TestView from "../views/TestView.vue";
+import AddWordView from "../views/AddWordView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,19 +20,19 @@ const router = createRouter({
     },
     {
       path: "/user/:userId/",
-      name: "user",
-      component: () => import("../views/UserView.vue"),
+      
+      component: UserView,
       meta: {
         requiresAuth: true
       },
       children: [
         {
-          path: "progress",
-          name: "progress",
+          path: "",
+          name: "user",
           // route level code-splitting
           // this generates a separate chunk (About.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
-          component: () => import("../views/MyProgressView.vue")
+          component: MyProgressView
         },
         {
           path: "test",
@@ -36,7 +40,7 @@ const router = createRouter({
           // route level code-splitting
           // this generates a separate chunk (About.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
-          component: () => import("../views/TestView.vue")
+          component: TestView
         },
         {
           path: "addword",
@@ -44,7 +48,7 @@ const router = createRouter({
           // route level code-splitting
           // this generates a separate chunk (About.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
-          component: () => import("../views/AddWordView.vue")
+          component: AddWordView
         },
       ]
     },

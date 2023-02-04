@@ -13,7 +13,13 @@ export const useWordStore = defineStore("words", {
     state: () => ({
         userWords: [],
         wordsToAdd: [],
-
+        // wordGroups: [{
+        //     groupId: null,
+        //     words: [{
+        //         word: null,
+        //         wordId: null
+        //     }]
+        // }],
         wordInfo: null,
         successMessage: null,
         errMessage: null
@@ -22,15 +28,25 @@ export const useWordStore = defineStore("words", {
         // create a getter for the wordsToAdd(state) to update when a word is added to it
     },
     actions: {
+
+        // filterWordGroups(){
+        //     // get the groupId of all userWords
+        //     // for all matching groupId words
+        //     // push the groupId
+        //     // const groups = []
+        //     for(let i = 0; i < userWords.length; i++){
+        //         console.log(userWords[i].groupId)
+        //     }
+        // },
         // Get word info from dictionary API 
-        async getDefinition(word){
+        getDefinition(word){
             const stringWord = word.toString()
-            await axios.request({
+            axios.request({
                 url: "https://api.dictionaryapi.dev/api/v2/entries/en/"+stringWord,
                 method: "GET",
             }).then((response)=>{
                 console.log(response.data)
-                this.wordInfo = response.data[0]
+                this.wordInfo = response.data
             }).catch((error)=>{
                 this.errorResponse = error.response.data.title
             })
@@ -76,7 +92,8 @@ export const useWordStore = defineStore("words", {
             }).catch((err) => {
                 this.errMessage = err
             })
-        }
+        },
+        
     }
 });
 

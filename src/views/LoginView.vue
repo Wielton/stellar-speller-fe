@@ -19,9 +19,10 @@ const { login } = userStore;
     <v-row>
       <v-col cols="12">
         <v-card class="mx-auto" max-width="344" title="Stellar Speller">
-          <v-container>
+          <v-form>
             <v-text-field
               v-model="loginForm.username"
+              type="name"
               color="primary"
               label="Username"
               variant="underlined"
@@ -29,6 +30,7 @@ const { login } = userStore;
 
             <v-text-field
               v-model="loginForm.password"
+              type="password"
               color="primary"
               label="Password"
               placeholder="Enter your password"
@@ -40,7 +42,7 @@ const { login } = userStore;
               color="secondary"
               label="I agree to site terms and conditions"
             ></v-checkbox> -->
-          </v-container>
+          </v-form>
 
           <v-divider></v-divider>
 
