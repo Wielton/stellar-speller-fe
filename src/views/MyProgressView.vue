@@ -1,13 +1,19 @@
 <script setup>
-// import { computed } from "vue";
+import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useWordStore } from "../stores/words";
+import { useAnswerStore } from "../stores/answers";
 
 const { userWords } = storeToRefs(useWordStore());
+const answerStore = useAnswerStore();
+const { getAllAnswers } = answerStore;
 // onUpdated(() => {
 // this.getUserWords()
 // })
 // const wordGroups = computed(() => {});
+onMounted(() => {
+  getAllAnswers();
+});
 </script>
 <template>
   <v-container fluid>
@@ -19,10 +25,12 @@ const { userWords } = storeToRefs(useWordStore());
         <h3>Your Words:</h3>
       </v-col>
       <v-col cols="8">
-        <v-list dense max-height="300" color="#284b63">
+        <v-list dense max-height="300" background-color="inherit">
           <!-- {{ group.groupId }} -->
-          <v-list-item outlined v-for="word in userWords" :key="word.wordId">
-            {{ word.word }}
+          <v-list-item outlined v-for="word in userWords" :key="word.wordId" :word="word">
+            <v-btn flat>
+              {{ word.word }}
+            </v-btn>
           </v-list-item>
         </v-list>
       </v-col>

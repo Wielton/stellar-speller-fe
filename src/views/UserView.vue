@@ -1,10 +1,12 @@
 <script setup>
-import { onBeforeMount } from "vue";
+import { onBeforeMount, onUpdated } from "vue";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "../stores/user";
 import { useWordStore } from "../stores/words";
+import { useAnswerStore } from "../stores/answers";
 // import { useTestStore } from "../stores/test";
 
+const { getAllAnswers } = useAnswerStore();
 const { getUserWords } = useWordStore();
 // const { userWords } = storeToRefs(useWordStore())
 const { user } = storeToRefs(useUserStore());
@@ -13,6 +15,11 @@ const { logout } = useUserStore();
 
 onBeforeMount(() => {
   getUserWords();
+  getAllAnswers();
+});
+onUpdated(() => {
+  getUserWords();
+  getAllAnswers();
 });
 </script>
 
@@ -33,12 +40,11 @@ onBeforeMount(() => {
   </v-layout>
 </template>
 <style lang="css" scoped>
-.list {
-  background-color: inherit;
-  color: green;
-}
-.btn {
-  background-color: #282828;
+.v-btn {
+  background-color: #284b63;
   color: #fafafa;
+}
+.v-bottom-navigation {
+  background-color: #3c6e71;
 }
 </style>

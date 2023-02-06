@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-import router from "@/router"
+import router from "@/router";
+import cookies from "vue-cookies";
 import { useWordStore } from "./words";
 
 
@@ -64,6 +65,9 @@ export const useTestStore = defineStore("test", {
             await axios.request({
                 url: import.meta.env.VITE_API_URL+"answers",
                 method: "POST",
+                params: {
+                    "sessionToken": cookies.get("sessionToken")
+                },
                 data: {
                     words: this.answersToAdd
                 }

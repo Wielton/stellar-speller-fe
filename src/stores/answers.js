@@ -3,7 +3,6 @@ import axios from "axios";
 import cookies from "vue-cookies";
 import { useWordStore } from "./words";
 
-
 export const useAnswerStore = defineStore("answers", {
     
     state: () => ({
@@ -12,9 +11,6 @@ export const useAnswerStore = defineStore("answers", {
         weakestWords: [],
         errMessage: null
     }),
-    getters: {
-        // create a getter for the wordsToAdd(state) to update when a word is added to it
-    },
     actions: {
         
         async getAllAnswers(){
@@ -27,31 +23,46 @@ export const useAnswerStore = defineStore("answers", {
             }).then((response) => {
                 console.log(response.data)
                 this.allAnswers = response.data
-            }).catch((err) => {
-                this.errMessage = err
+                this.filterAnswers(this.allAnswers)
+            }).catch((error) => {
+                this.errMessage = error
             })
         },
         filterAnswers(){
-            // This function will calculate all answers into correct or wrong arrays
-            // 
-            // STEPS:
-            //  1. Use allAnswers and userWords
-            const { userWords } = useWordStore()
-            //  2. Use empty arrays of objects: correctAnswers and wrongAnswers
+        //     // This function will calculate all answers into correct or wrong arrays
+        //     // 
+        //     // STEPS:
+        //     //  1. Use allAnswers and userWords
+        //     //  2. Use empty arrays of objects: correctAnswers and wrongAnswers
+            const { userWords } = useWordStore()         
             const correctAnswers = []
             const wrongAnswers = []
-
-            //  3. Check if the answer is correct(by matching with the word from userWords)
-            // for(words in userWords){
-            //     for (answer in this.allAnswers){
-            //         
-            // }
-            // }
-            // push to correctAnswers, else push to wrongAnswers
-
-        },
-        filterWeakWords(){
-
+            
+            for(let i = 0; i < this.allAnswers.length;i++){
+                for(let j = 0;j < userWords.length; j++){
+                    
+                    //  3. Check if the answer is correct(by matching with the word from userWords)
+                    if(userWords[j].word == this.allAnswers[i].word && userWords[j].wordId == this.allAnswers[i].ogWordId){
+                        // push to correctAnswers
+                        correctAnswers.push(this.allAnswers[i])
+                        
+                    }else if(userWords[j].word != this.allAnswers[i].word && userWords[j].wordId == this.allAnswers[i].ogWordId){
+                        //  else push to wrongAnswers
+                        wrongAnswers.push(this.allAnswers[i])
+}
+                } 
+            }
+            console.log("Correct Answers: ", correctAnswers)
+            console.log("Wrong Answers: ", wrongAnswers)
+            // 4. Count total amount of words in correctAnswers that match
+            //    and do the same with wrongAnswers
+            // 5. If more in correctAnswers, push word to this.strongestWords
+            // 6. Else if more in wrongAnswers, push word to this.weakestWords
         }
+
+        // },
+        // filterWeakWords(){
+
+        // }
     }
 });
