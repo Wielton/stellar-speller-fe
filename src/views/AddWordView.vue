@@ -29,32 +29,37 @@ function submitWordGroup(wordsToAdd) {
 -->
 <template>
   <v-container fluid>
-    <v-row align-center justify-center>
-      <v-col cols="12">
-        <h1>Add a new group of words:</h1>
-        <v-form width="300px" ref="form" v-if="wordsToAdd.length <= 5">
+    <v-row align="center" justify="center">
+      <v-col cols="12" sm="6">
+        <h1>Add new words:</h1>
+        <v-form ref="form" v-if="wordsToAdd.length <= 5">
           <v-text-field
             label="Add a new word..."
             hide-details="auto"
             v-model="word"
+            append-icon="mdi-plus"
+            @click:append="addWord(word)"
           ></v-text-field>
-          <v-btn rounded @click="addWord(word)"> ADD </v-btn>
         </v-form>
       </v-col>
     </v-row>
-    <v-row v-if="wordsToAdd.length">
+    <v-row v-if="wordsToAdd.length" align="center" justify="center">
       <h3>Words to add:</h3>
-      <v-col cols="6">
+      <v-col cols="12" sm="6" class="d-flex">
         <!-- This is a sidebar column -->
-        <v-list rounded v-for="word in wordsToAdd" :key="word.index" :word="word">
-          <v-list-item>
+        <v-list>
+          <v-list-item
+            v-for="word in wordsToAdd"
+            :key="word.index"
+            :word="word"
+          >
             {{ word }}
           </v-list-item>
         </v-list>
       </v-col>
-      <v-col cols="6">
+      <v-col cols="12" sm="6">
         <v-btn
-          v-if="wordsToAdd.length === 6"
+          v-if="wordsToAdd.length >= 1"
           class="btn"
           rounded
           @click="submitWordGroup(wordsToAdd)"

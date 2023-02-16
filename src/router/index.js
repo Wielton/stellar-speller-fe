@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-// import { storeToRefs } from "pinia";
-import {useUserStore} from "../stores/user";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "../stores/user";
 import HomeView from "../views/HomeView.vue";
 import UserView from "../views/UserView.vue";
 import MyProgressView from "../views/MyProgressView.vue";
@@ -15,15 +15,14 @@ const router = createRouter({
       name: "home",
       component: HomeView,
       meta: {
-        requiresAuth: false
+        requiresAuth: false,
       },
     },
     {
       path: "/user/:userId/",
-      
       component: UserView,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
       },
       children: [
         {
@@ -32,7 +31,10 @@ const router = createRouter({
           // route level code-splitting
           // this generates a separate chunk (About.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
-          component: MyProgressView
+          component: MyProgressView,
+          meta: {
+            requiresAuth: true,
+          },
         },
         {
           path: "test",
@@ -40,7 +42,10 @@ const router = createRouter({
           // route level code-splitting
           // this generates a separate chunk (About.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
-          component: TestView
+          component: TestView,
+          meta: {
+            requiresAuth: true,
+          },
         },
         {
           path: "addword",
@@ -48,11 +53,14 @@ const router = createRouter({
           // route level code-splitting
           // this generates a separate chunk (About.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
-          component: AddWordView
+          component: AddWordView,
+          meta: {
+            requiresAuth: true,
+          },
         },
-      ]
+      ],
     },
-    
+
     {
       path: "/login",
       name: "login",
@@ -61,7 +69,7 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import("../views/LoginView.vue"),
       meta: {
-        requiresAuth: false
+        requiresAuth: false,
       },
     },
     {
@@ -72,40 +80,34 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import("../views/RegisterView.vue"),
       meta: {
-        requiresAuth: false
+        requiresAuth: false,
       },
     },
     // catch all redirect to home page
     // { path: "/:pathMatch(.*)*", redirect: "/" }
   ],
-
 });
 
-router.beforeEach(async (to) => {
-  const userStore = useUserStore()
-  if(userStore.userSession && !userStore.user){
-    userStore.getAuthentication()
-    console.log(userStore.user)
+router.beforeEach((to, from, next) => {
+  const { userSession } = storeToRefs(useUserStore());
+  if (to.meta.requiresAuth && !userSession) {
+    next({ name: "login" });
+  } else {
+    next();
   }
-  // redirect to login page if not logged in and trying to access a restricted page 
-  const publicPages = ['/login', '/register'];
-  const authRequired = !publicPages.includes(to.path);
-  
-  if (authRequired && !userStore.user) {
-      userStore.returnUrl = to.fullPath;
-      return {name: "login"};
-  }
-  // else if ((userStore.userSession) && (!userStore.user)){
-  //   userStore.getAuthentication()
-  //   console.log(userStore.user)
-  //   if (to.meta.requiresAuth && !userStore.user) {
-  //     userStore.returnUrl = to.fullPath
-  //     return {name: "login"}
-  // }
-  // // else{
-  // //   return {name: "user", params:{userId: userStore.user.userId}}
-  // // }
-  // }
-  
-})
+});
+// redirect to login page if not logged in and trying to access a restricted page
+
+// else if ((userStore.userSession) && (!userStore.user)){
+//   userStore.getAuthentication()
+//   console.log(userStore.user)
+//   if (to.meta.requiresAuth && !userStore.user) {
+//     userStore.returnUrl = to.fullPath
+//     return {name: "login"}
+// }
+// // else{
+// //   return {name: "user", params:{userId: userStore.user.userId}}
+// // }
+// }
+
 export default router;

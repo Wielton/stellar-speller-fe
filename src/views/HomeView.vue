@@ -1,30 +1,30 @@
 <script setup>
+import { storeToRefs } from "pinia";
 import { useUserStore } from "../stores/user";
 
-const userStore = useUserStore();
+const { logout } = useUserStore();
+const { user } = storeToRefs(useUserStore());
 </script>
 
 <template>
-  <v-container fluid>
-    <v-row justify-center>
-      <v-col cols="12" md="12" lg="12">
+  <v-container fluid fill-height>
+    <v-row justify="center" align="center">
+      <v-col cols="12" md="12" lg="12" class="fill-height pa-6">
         <h1>Stellar Speller</h1>
         <h3>Track your progress and perfect your spelling!</h3>
         <!-- This is a hack-way of  -->
-        <v-btn v-if="!userStore.user.userId" :to="{ name: 'login' }">LOGIN</v-btn>
-        <v-btn
-          v-if="userStore.user.userId"
-          :to="{ name: 'user', params: { userId: userStore.user.userId } }"
-          >HOME</v-btn
-        >
-        <v-btn v-if="userStore.user.userId" @click="userStore.logout()">Logout</v-btn>
+      </v-col>
+      <v-col cols="12" v-if="user == null">
+        <div>
+          <v-btn :to="{ name: 'login' }">Login</v-btn>
+        </div>
+      </v-col>
+      <v-col cols="12" v-else>
+        <v-btn :to="{ name: 'user', params: { userId: user.userId } }">
+          HOME
+        </v-btn>
+        <v-btn @click="logout()">Logout</v-btn>
       </v-col>
     </v-row>
   </v-container>
 </template>
-<style lang="css" scoped>
-h1,
-h3 {
-  color: rgba(27, 37, 116, 0.6);
-}
-</style>

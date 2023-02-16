@@ -1,20 +1,36 @@
 <script setup>
-import { RouterView } from "vue-router";
 import { storeToRefs } from "pinia";
+import { onBeforeMount, onMounted } from "vue";
+import { RouterView } from "vue-router";
 import { useUserStore } from "./stores/user";
 
-const { user, userSession } = storeToRefs(useUserStore());
-const { getAuthentication } = useUserStore();
-if (!userSession) {
-  console.log("No sessionToken found");
-} else {
-  getAuthentication();
-  console.log(user.value);
-}
+const store = useUserStore();
+const { user, userSession } = storeToRefs(store);
+const { getAuthentication } = store;
+
+onBeforeMount(() => {
+  console.log(userSession, user);
+  if (userSession.value && !user.value) {
+    getAuthentication();
+  }
+});
+onMounted(() => {
+  console.log(user);
+});
 </script>
 
 <template>
-  <RouterView />
+  <v-app id="app">
+    <v-main id="app-main">
+      <v-container fluid>
+        <RouterView />
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
-<style lang="css" scoped></style>
+<style lang="css" scoped>
+#app {
+  background-color: #89acd2ff;
+}
+</style>

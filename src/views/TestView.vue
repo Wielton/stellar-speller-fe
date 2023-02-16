@@ -1,22 +1,16 @@
 <script setup>
-import { onBeforeMount } from "vue";
+import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useTestStore } from "../stores/test";
-import { useAnswerStore } from "../stores/answers";
 
 // The test list will be fetched from the /api/test endpoint and will grab the last group_id and all joined words
 const { testWords, answersToAdd } = storeToRefs(useTestStore());
-const {
-  addWordToGroup,
-  submitAnswers,
-  removeWordFromGroup,
-  filterTestWords,
-} = useTestStore();
-const { filterAnswers } = useAnswerStore();
-onBeforeMount(() => {
-  filterTestWords();
+const { filterTestWords, addWordToGroup, submitAnswers } = useTestStore();
+onMounted(() => {
+  if (testWords.length >= 1) {
+    filterTestWords();
+  }
 });
-filterAnswers();
 // Create a function to filter out the answer and the wordId it is associated with
 
 // Dynamically rendered test words with the original wordId linked to it for axios POST
@@ -26,37 +20,59 @@ filterAnswers();
 </script>
 <template>
   <v-container fluid>
-    <v-row align-center justify-center>
-      <v-col cols="12" sm="6">
+    <v-row v-show="answersToAdd.length" align="center" justify="center">
+      <v-col
+        cols="4"
+        v-for="answer in answersToAdd"
+        :key="answer.wordId"
+        :answer="answer"
+      >
+        <v-card solo>
+          <v-card-title>{{ answer.word }}</v-card-title>
+        </v-card>
+      </v-col>
+
+      <v-btn
+        v-show="answersToAdd.length >= 1"
+        @click="submitAnswers()"
+        :color="testWords.length == 0 ? 'green' : 'red'"
+        >SUBMIT</v-btn
+      >
+    </v-row>
+    <v-row align="center" justify="center">
+      <v-col cols="12" align="center" justify="center">
         <!-- Test List from current week -->
 
-        <v-list v-if="testWords.length">
-          <v-list-item solo v-for="word in testWords" :key="word.wordId" :word="word">
-            <v-list-item-title>{{ word.word }}</v-list-item-title>
-            <v-text-field
-              solo
-              append-icon="mdi-plus"
-              @click:append="addWordToGroup(word.answer, word.wordId)"
-              v-model="word.answer"
-              placeholder="Answer?"
-            ></v-text-field>
-          </v-list-item>
-        </v-list>
-      </v-col>
-      <v-col cols="12" sm="6">
-        <v-list v-if="answersToAdd.length">
+        <v-list
+          v-if="testWords.length"
+          bg-color="#667bc7ff"
+          color="#89acd2ff"
+          rounded
+          class="pa-6"
+          density="compact"
+          lines="one"
+        >
           <v-list-item
-            solo
-            v-for="answer in answersToAdd"
-            :key="answer.wordId"
-            :answer="answer"
-            append-icon="mdi-minus"
-            @click:append="removeWordFromGroup(answer)"
+            v-for="word in testWords"
+            :key="word.wordId"
+            :word="word"
+            rounded
+            density="compact"
+            elevation="8"
+            class="pa-6"
           >
-            <v-list-item-title :answer="answer">{{ answer.word }}</v-list-item-title>
+            <v-card outlined rounded width="90%">
+              <v-card-title>{{ word.word }}</v-card-title>
+              <v-text-field
+                rounded
+                append-icon="mdi-plus"
+                @click:append="addWordToGroup(word.answer, word.wordId)"
+                v-model="word.answer"
+                placeholder="Answer?"
+              ></v-text-field>
+            </v-card>
           </v-list-item>
         </v-list>
-        <v-btn v-if="answersToAdd.length == 6" @click="submitAnswers()">SUBMIT</v-btn>
       </v-col>
     </v-row>
   </v-container>

@@ -2,6 +2,10 @@ import { defineStore } from "pinia";
 import router from "@/router";
 import axios from "axios";
 import cookies from "vue-cookies";
+import { useAlertStore } from "./alert";
+import { useAnswerStore } from "./answers";
+import { useTestStore } from "./test";
+import { useWordStore } from "./words";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
@@ -15,16 +19,12 @@ export const useUserStore = defineStore("user", {
       username: "",
       password: "",
     },
-    user: {
-      userId: null,
-      username: null,
-    },
-    errMessage: null,
+    user: null,
     returnUrl: null,
   }),
-
   actions: {
     async getAuthentication() {
+      this.user = null;
       await axios
         .request({
           url: import.meta.env.VITE_API_URL + "user",
@@ -36,8 +36,9 @@ export const useUserStore = defineStore("user", {
         .then((response) => {
           this.user = response.data;
         })
-        .catch((err) => {
-          this.errMessage = err.data;
+        .catch((error) => {
+          const alertStore = useAlertStore();
+          alertStore.error(error);
         });
     },
     async createAccount(username, password) {
@@ -51,12 +52,15 @@ export const useUserStore = defineStore("user", {
           },
         })
         .then((response) => {
+          this.createAccountForm.username = "";
+          this.createAccountForm.password = "";
           this.user = response.data;
-          cookies.set("sessionToken", response.data.sessionToken);
+          cookies.set("sessionToken", this.user.sessionToken);
           router.push({ name: "user", params: { userId: this.user.userId } });
         })
-        .catch((err) => {
-          this.errMessage = err.data;
+        .catch((error) => {
+          const alertStore = useAlertStore();
+          alertStore.error(error);
         });
     },
     async login(username, password) {
@@ -70,12 +74,15 @@ export const useUserStore = defineStore("user", {
           },
         })
         .then((response) => {
+          this.loginForm.username = "";
+          this.loginForm.password = "";
           this.user = response.data;
           cookies.set("sessionToken", response.data.sessionToken);
           router.push({ name: "user", params: { userId: this.user.userId } });
         })
-        .catch((err) => {
-          this.errMessage = err.data;
+        .catch((error) => {
+          const alertStore = useAlertStore();
+          alertStore.error(error);
         });
     },
     async logout() {
@@ -87,14 +94,21 @@ export const useUserStore = defineStore("user", {
             sessionToken: cookies.get("sessionToken"),
           },
         })
-        .then((response) => {
-          console.log(response);
-          this.user = null;
+        .then(() => {
+          const testStore = useTestStore();
+          const wordStore = useWordStore();
+          const answerStore = useAnswerStore();
+          testStore.$reset();
+          wordStore.$reset();
+          answerStore.$reset();
           cookies.remove("sessionToken");
           router.push({ name: "home" });
+          this.user = null;
+          console.log("stores reset", wordStore.userWords);
         })
-        .catch((err) => {
-          this.errMessage = err.data;
+        .catch((error) => {
+          const alertStore = useAlertStore();
+          alertStore.error(error);
         });
     },
   },
