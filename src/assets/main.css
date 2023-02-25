@@ -1,59 +1,10 @@
 #app {
-    font-family: 'Schoolbell', cursive;
+    /* font-family: 'Schoolbell', cursive; */
     /* font-size: 1.5em; */
     
     min-height: 100vh;
 }
 a {
+    color: #5c6bc0;
     text-decoration: none;
 }
-/* 
-
-    Color Scheme:
-    CSS HEX 
---gunmetal: #182825ff;
---air-force-blue: #6a8d92ff;
---glaucous: #667bc7ff;
---ruddy-blue: #89acd2ff;
---white-smoke: #f4f1f1ff;
-
-    CSS HSL
---gunmetal: hsla(169, 25%, 13%, 1);
---air-force-blue: hsla(187, 16%, 49%, 1);
---glaucous: hsla(227, 46%, 59%, 1);
---ruddy-blue: hsla(211, 45%, 68%, 1);
---white-smoke: hsla(0, 12%, 95%, 1);
-
-    SCSS HEX
-$gunmetal: #182825ff;
-$air-force-blue: #6a8d92ff;
-$glaucous: #667bc7ff;
-$ruddy-blue: #89acd2ff;
-$white-smoke: #f4f1f1ff;
-
-    SCSS HSL
-$gunmetal: hsla(169, 25%, 13%, 1);
-$air-force-blue: hsla(187, 16%, 49%, 1);
-$glaucous: hsla(227, 46%, 59%, 1);
-$ruddy-blue: hsla(211, 45%, 68%, 1);
-$white-smoke: hsla(0, 12%, 95%, 1);
-
-    SCSS RGB
-$gunmetal: rgba(24, 40, 37, 1);
-$air-force-blue: rgba(106, 141, 146, 1);
-$glaucous: rgba(102, 123, 199, 1);
-$ruddy-blue: rgba(137, 172, 210, 1);
-$white-smoke: rgba(244, 241, 241, 1);
-
-SCSS Gradient
-$gradient-top: linear-gradient(0deg, #182825ff, #6a8d92ff, #667bc7ff, #89acd2ff, #f4f1f1ff);
-$gradient-right: linear-gradient(90deg, #182825ff, #6a8d92ff, #667bc7ff, #89acd2ff, #f4f1f1ff);
-$gradient-bottom: linear-gradient(180deg, #182825ff, #6a8d92ff, #667bc7ff, #89acd2ff, #f4f1f1ff);
-$gradient-left: linear-gradient(270deg, #182825ff, #6a8d92ff, #667bc7ff, #89acd2ff, #f4f1f1ff);
-$gradient-top-right: linear-gradient(45deg, #182825ff, #6a8d92ff, #667bc7ff, #89acd2ff, #f4f1f1ff);
-$gradient-bottom-right: linear-gradient(135deg, #182825ff, #6a8d92ff, #667bc7ff, #89acd2ff, #f4f1f1ff);
-$gradient-top-left: linear-gradient(225deg, #182825ff, #6a8d92ff, #667bc7ff, #89acd2ff, #f4f1f1ff);
-$gradient-bottom-left: linear-gradient(315deg, #182825ff, #6a8d92ff, #667bc7ff, #89acd2ff, #f4f1f1ff);
-$gradient-radial: radial-gradient(#182825ff, #6a8d92ff, #667bc7ff, #89acd2ff, #f4f1f1ff);
-
-*/

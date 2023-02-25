@@ -4,33 +4,30 @@ import { onBeforeMount, onMounted } from "vue";
 import { RouterView } from "vue-router";
 import { useUserStore } from "./stores/user";
 
-const store = useUserStore();
-const { user, userSession } = storeToRefs(store);
-const { getAuthentication } = store;
+const { user, userSession } = storeToRefs(useUserStore());
+const { getAuthentication } = useUserStore();
 
 onBeforeMount(() => {
-  console.log(userSession, user);
-  if (userSession.value && !user.value) {
+  console.log(userSession.value, user.value.userId);
+  if (userSession.value && !user.value.userId) {
     getAuthentication();
   }
 });
 onMounted(() => {
-  console.log(user);
+  console.log(user.value.userId);
 });
 </script>
 
 <template>
   <v-app id="app">
-    <v-main id="app-main">
-      <v-container fluid>
-        <RouterView />
-      </v-container>
+    <v-main app transition="slide-x-transition">
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
 
 <style lang="css" scoped>
 #app {
-  background-color: #89acd2ff;
+  background-color: #9fa8da;
 }
 </style>

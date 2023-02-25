@@ -3,7 +3,6 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import router from "@/router";
 import cookies from "vue-cookies";
-import { useUserStore } from "./user";
 
 // Add a usage sentence or word description
 //  so
@@ -61,7 +60,6 @@ export const useWordStore = defineStore("words", {
         },
 
         addWordsToDatabase(words) {
-            const { user } = useUserStore();
             axios
                 .request({
                     url: import.meta.env.VITE_API_URL + "words",
@@ -76,7 +74,7 @@ export const useWordStore = defineStore("words", {
                 .then((response) => {
                     console.log(response);
                     this.wordsToAdd = [];
-                    router.push({ name: "user", params: { userId: user.userId } });
+                    router.push({ name: "user" });
                 })
                 .catch((error) => {
                     this.errMessage = error.response;

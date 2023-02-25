@@ -3,8 +3,8 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import router from "@/router";
 import cookies from "vue-cookies";
-import { useUserStore } from "./user";
 import { useWordStore } from "./words";
+// import { useAnswerStore } from "./answers";
 
 // Add a usage sentence or word description
 //  so
@@ -28,11 +28,19 @@ export const useTestStore = defineStore("test", {
         // create a getter for the wordsToAdd(state) to update when a word is added to it
     },
     actions: {
-        // Function to filter strongerWords and weakerWords
-
+        // Function to add a couple random weak words to the practice test module
+        getRandomWeakWords(arr) {
+            const ranIndex = Math.floor(Math.random() * arr.length);
+            const item1 = arr[ranIndex];
+            arr.pop(item1)
+            const item2 = arr[ranIndex];
+            return { item1, item2 }
+        },
         // Create a function to filter userWords
         filterTestWords() {
+            // const { weakWords } = useAnswerStore();
             const { userWords } = useWordStore();
+            // const extraWords = this.getRandomWeakWords(weakWords)
             // Get words from words.js
             // Get the last element in the array
             const lastElement = userWords[userWords.length - 1];
@@ -42,6 +50,7 @@ export const useTestStore = defineStore("test", {
             this.testWords = userWords.filter(
                 (word) => word.groupId == lastElementGroupId
             );
+            // this.testWords += extraWords
         },
 
         // This function is in words.js
@@ -64,7 +73,6 @@ export const useTestStore = defineStore("test", {
 
         //
         async submitAnswers() {
-            const { user } = useUserStore();
             await axios
                 .request({
                     url: import.meta.env.VITE_API_URL + "answers",
@@ -79,7 +87,7 @@ export const useTestStore = defineStore("test", {
                 .then((response) => {
                     this.answersToAdd = [];
                     this.successMessage = response;
-                    router.push({ name: "user", params: { userId: user.userId } });
+                    router.push({ name: "user" });
                 })
                 .catch((error) => {
                     this.errMessage = error.response;

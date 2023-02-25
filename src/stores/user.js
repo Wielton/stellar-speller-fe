@@ -3,9 +3,6 @@ import router from "@/router";
 import axios from "axios";
 import cookies from "vue-cookies";
 import { useAlertStore } from "./alert";
-import { useAnswerStore } from "./answers";
-import { useTestStore } from "./test";
-import { useWordStore } from "./words";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
@@ -19,12 +16,14 @@ export const useUserStore = defineStore("user", {
       username: "",
       password: "",
     },
-    user: null,
+    user: {
+      username: null,
+      userId: null,
+    },
     returnUrl: null,
   }),
   actions: {
     async getAuthentication() {
-      this.user = null;
       await axios
         .request({
           url: import.meta.env.VITE_API_URL + "user",
@@ -34,7 +33,8 @@ export const useUserStore = defineStore("user", {
           },
         })
         .then((response) => {
-          this.user = response.data;
+          this.user.username = response.data.username;
+          this.user.userId = response.data.userId;
         })
         .catch((error) => {
           const alertStore = useAlertStore();
@@ -52,10 +52,9 @@ export const useUserStore = defineStore("user", {
           },
         })
         .then((response) => {
-          this.createAccountForm.username = "";
-          this.createAccountForm.password = "";
-          this.user = response.data;
-          cookies.set("sessionToken", this.user.sessionToken);
+          this.user.username = response.data.username;
+          this.user.userId = response.data.userId;
+          cookies.set("sessionToken", response.data.sessionToken);
           router.push({ name: "user", params: { userId: this.user.userId } });
         })
         .catch((error) => {
@@ -74,11 +73,14 @@ export const useUserStore = defineStore("user", {
           },
         })
         .then((response) => {
-          this.loginForm.username = "";
-          this.loginForm.password = "";
-          this.user = response.data;
-          cookies.set("sessionToken", response.data.sessionToken);
-          router.push({ name: "user", params: { userId: this.user.userId } });
+          const userData = response.data;
+          this.user.username = userData.username;
+          this.user.userId = userData.userId;
+          cookies.set("sessionToken", userData.sessionToken);
+          router.push({
+            name: "user",
+            params: { userId: this.user.userId },
+          });
         })
         .catch((error) => {
           const alertStore = useAlertStore();
@@ -95,16 +97,10 @@ export const useUserStore = defineStore("user", {
           },
         })
         .then(() => {
-          const testStore = useTestStore();
-          const wordStore = useWordStore();
-          const answerStore = useAnswerStore();
-          testStore.$reset();
-          wordStore.$reset();
-          answerStore.$reset();
           cookies.remove("sessionToken");
+          this.user.username = null;
+          this.user.userId = null;
           router.push({ name: "home" });
-          this.user = null;
-          console.log("stores reset", wordStore.userWords);
         })
         .catch((error) => {
           const alertStore = useAlertStore();

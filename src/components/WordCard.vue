@@ -1,19 +1,24 @@
 <script setup>
+import { onMounted, onUpdated } from "vue";
+import { storeToRefs } from "pinia";
+import { useAnswerStore } from "../stores/answers";
+
+const { filterStrongAndWeakWords } = useAnswerStore();
+const { strongWords, weakWords } = storeToRefs(useAnswerStore());
+onMounted(() => {
+  filterStrongAndWeakWords();
+});
+onUpdated(() => {
+  filterStrongAndWeakWords();
+});
 defineProps({
-  joinedAnswersAndWords: Array,
-  strongWords: Array,
-  weakWords: Array,
+  word: { type: Object, default: () => {} },
 });
 </script>
 <template>
-  <v-card
-    color="#89acd2ff"
-    rounded
-    v-for="word in joinedAnswersAndWords"
-    :key="word.wordId"
-    :word="word"
-  >
+  <v-card color="#c5cae9" rounded>
     <v-card-title
+      class="d-flex justify-space-around"
       :class="
         strongWords.includes(word)
           ? 'strong-word-title'
@@ -21,27 +26,32 @@ defineProps({
           ? 'weak-word-title'
           : 'avg-word-title'
       "
-      >{{ word.word }}
+    >
+      {{ word.word }}
     </v-card-title>
     <v-row align="center" justify="center">
-      <v-col v-if="word.correctAnswers.length" cols="6"
-        ><v-card-subtitle class="card-subtitle"
-          >Correct Answers</v-card-subtitle
+      <v-col cols="6"
+        ><v-card-subtitle
+          class="text-indigo-lighten-1 font-weight-bold d-flex justify-center"
+          >Correct</v-card-subtitle
         >
-        <v-divider></v-divider>
+        <v-divider color="#5c6bc0"></v-divider>
         <v-card-text
-          class="card-text"
+          class="text-indigo-lighten-2 d-flex justify-center"
           v-for="(correctAnswer, index) in word.correctAnswers"
           :key="index"
           :correctAnswer="correctAnswer"
           >{{ correctAnswer }}</v-card-text
         >
       </v-col>
-      <v-col v-if="word.wrongAnswers.length" cols="6"
-        ><v-card-subtitle class="card-subtitle">Wrong Answers</v-card-subtitle>
-        <v-divider></v-divider>
+      <v-col cols="6"
+        ><v-card-subtitle
+          class="text-indigo-lighten-1 font-weight-bold d-flex justify-center"
+          >Wrong</v-card-subtitle
+        >
+        <v-divider color="#5c6bc0"></v-divider>
         <v-card-text
-          class="card-text"
+          class="text-indigo-lighten-2 d-flex justify-center"
           v-for="(wrongAnswer, index) in word.wrongAnswers"
           :key="index"
           :wrongAnswer="wrongAnswer"
@@ -52,7 +62,9 @@ defineProps({
         cols="12"
         v-if="!word.correctAnswers.length && !word.wrongAnswers.length"
       >
-        <v-card-text class="card-text"> Not answered yet </v-card-text>
+        <v-card-text class="text-indigo-lighten-1">
+          Not answered yet
+        </v-card-text>
       </v-col>
     </v-row>
   </v-card>
@@ -63,18 +75,18 @@ defineProps({
 .avg-word-title,
 .card-subtitle,
 .card-text {
-  color: #f4f1f1ff;
+  color: whitesmoke;
 }
 .page-title {
   color: #89acd2ff;
 }
 .strong-word-title {
-  background-color: rgba(51, 179, 51, 0.489);
+  background-color: #4db6ac;
 }
 .weak-word-title {
-  background-color: rgba(152, 35, 35, 0.655);
+  background-color: #e57373;
 }
 .avg-word-title {
-  background-color: rgba(96, 131, 201, 0.47);
+  background-color: #7986cb;
 }
 </style>

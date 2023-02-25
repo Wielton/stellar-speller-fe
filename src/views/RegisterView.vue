@@ -7,66 +7,61 @@ const { createAccountForm } = storeToRefs(userStore);
 const { createAccount } = userStore;
 </script>
 <template>
-  <v-container fill-height fluid>
-    <v-row align="center" justify="center" class="pa-6">
-      <v-col cols="12" class="pa-6">
-        <h2>Create an account and begin tracking!</h2>
-      </v-col>
-    </v-row>
-    <v-row align="center" justify="center" class="ma-0">
-      <v-card max-width="350px" elevation="6">
-        <v-form style="background-color: #89acd2ff">
-          <v-row align="center" justify="center">
-            <v-col cols="12" class="pa-6">
-              <v-text-field
-                v-model="createAccountForm.username"
-                type="name"
-                bg-color="#f4f1f1ff"
-                color="#0081a7"
-                label="Username"
-                placeholder="Create a username"
-                outlined
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" class="pa-6">
-              <v-text-field
-                v-model="createAccountForm.password"
-                type="password"
-                bg-color="#f4f1f1ff"
-                label="Password"
-                placeholder="Create a password"
-                outlined
-                required
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row align="center" justify="center">
-            <v-col cols="12" sm="6" md="6">
-              <v-btn
-                rounded
-                color="#3c6e71"
-                @click="
-                  createAccount(
-                    createAccountForm.username,
-                    createAccountForm.password
-                  )
-                "
-              >
-                Create Account
-              </v-btn>
-            </v-col>
-            <v-col cols="12" sm="6" md="6">
-              <p>
-                Already have an account?
-                <span></span>
-                <router-link :to="{ name: 'login' }"> Login </router-link>
-              </p>
-            </v-col>
-          </v-row>
-        </v-form>
-      </v-card>
+  <v-container class="fill-height" fluid>
+    <v-row align="center" justify="center">
+      <v-form color="transparent">
+        <v-row align="center" justify="center">
+          <v-col cols="12" class="pa-6">
+            <v-text-field
+              variant="solo"
+              v-model="createAccountForm.username"
+              type="name"
+              label="Username"
+              placeholder="Create a username"
+              bg-color="indigo-lighten-5"
+              color="indigo-darken-2"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" class="pa-6">
+            <v-text-field
+              variant="solo"
+              v-model="createAccountForm.password"
+              type="password"
+              label="Password"
+              bg-color="indigo-lighten-5"
+              color="indigo-darken-2"
+              placeholder="Create a password"
+              required
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row align="center" justify="center" class="pa-1 ma-0">
+          <v-col cols="12" sm="6" md="6">
+            <v-btn
+              flat
+              color="indigo-lighten-2"
+              @click="
+                createAccount(
+                  createAccountForm.username,
+                  createAccountForm.password
+                )
+              "
+            >
+              Signup
+            </v-btn>
+          </v-col>
+          <v-col cols="12" sm="6" md="6">
+            <p>
+              Already have an account?
+              <br />
+              <span>
+                <router-link :to="{ name: 'login' }"> Go to Login </router-link>
+              </span>
+            </p>
+          </v-col>
+        </v-row>
+      </v-form>
     </v-row>
   </v-container>
 </template>
-<style scoped lang="css"></style>
