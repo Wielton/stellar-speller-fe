@@ -45,7 +45,7 @@ function submitWordGroup(wordsToAdd) {
               ><v-icon
                 @click="addWord(word)"
                 icon="mdi-plus"
-                color="indigo-lighten-1"
+                color="indigo-lighten-5"
               ></v-icon></template
           ></v-text-field>
         </v-form>

@@ -8,6 +8,7 @@ export const useAnswerStore = defineStore("answers", {
     state: () => ({
         allAnswers: [],
         joinedAnswersAndWords: [],
+        wordGroups: [],
         strongWords: [],
         weakWords: [],
         evenStrengthWords: [],
@@ -43,6 +44,7 @@ export const useAnswerStore = defineStore("answers", {
             this.joinedAnswersAndWords = []
             for (let i = 0; i < userWords.length; i++) {
                 const word = {};
+                word["groupId"] = userWords[i].groupId
                 word["wordId"] = userWords[i].wordId;
                 word["word"] = userWords[i].word;
                 word["correctAnswers"] = [];
@@ -64,9 +66,6 @@ export const useAnswerStore = defineStore("answers", {
             }
         },
         filterStrongAndWeakWords() {
-            this.strongWords = []
-            this.weakWords = []
-            this.evenStrengthWords = []
             this.strongWords = this.joinedAnswersAndWords.filter(
                 (word) => word.correctAnswers.length > word.wrongAnswers.length
             );
@@ -76,13 +75,11 @@ export const useAnswerStore = defineStore("answers", {
             this.evenStrengthWords = this.joinedAnswersAndWords.filter(
                 (word) => word.correctAnswers.length == word.wrongAnswers.length
             );
-            }
-        // if(correctAnswers.length > wrongAnswers.length){
-        //     this.strongestWords
-        // }
-        // 4. Count total amount of words in correctAnswers that match
-        //    and do the same with wrongAnswers
-        // 5. If more in correctAnswers, push word to this.strongestWords
-        // 6. Else if more in wrongAnswers, push word to this.weakestWords
+            },
+            // The next function will filter each group of words into an array.
+            // filterWordGroups(){
+            //     this.wordGroups = this.joinedAnswersAndWords.filter(
+            //                 (word) => word.groupId)
+            // }
     },
 });

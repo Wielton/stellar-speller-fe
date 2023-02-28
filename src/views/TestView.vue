@@ -68,12 +68,9 @@ function removeWord(arr, item) {
             >
               <template v-slot:append
                 ><v-icon
-                  @click="
-                    addWord(word.answer, word.wordId);
-                    removeWord(testWords, word);
-                  "
+                  @click="addWord(word.answer, word.wordId)"
                   icon="mdi-plus"
-                  color="indigo-lighten-1"
+                  color="indigo-lighten-5"
                 ></v-icon
               ></template>
             </v-text-field>
@@ -91,10 +88,7 @@ function removeWord(arr, item) {
               {{ answer.word }}
               <v-icon
                 icon="mdi-minus"
-                @click="
-                  removeWord(answersToAdd, answer);
-                  filterTestWords();
-                "
+                @click="removeWord(answersToAdd, answer)"
               ></v-icon></div
           ></v-list-item>
           <v-btn

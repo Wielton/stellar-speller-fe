@@ -33,8 +33,7 @@ export const useTestStore = defineStore("test", {
             const ranIndex = Math.floor(Math.random() * arr.length);
             const item1 = arr[ranIndex];
             arr.pop(item1)
-            const item2 = arr[ranIndex];
-            return { item1, item2 }
+            return { item1 }
         },
         // Create a function to filter userWords
         filterTestWords() {
