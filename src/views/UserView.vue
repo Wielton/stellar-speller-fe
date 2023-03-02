@@ -16,13 +16,15 @@ const links = ref([
 
 <template>
   <v-container class="fill-height" fluid>
-    <v-row align="center" justify="center" class="pa-0">
-      <div
+    <v-app-bar color="#c5cae9">
+      <v-app-bar-title
         class="font-weight-bold text-center home-title text-h4 text-indigo-lighten-1"
         v-if="user.username"
       >
         Welcome {{ user.username }} !
-      </div>
+      </v-app-bar-title>
+    </v-app-bar>
+    <v-row align="center" justify="center" class="pa-0">
       <v-col cols="12" transition="slide-x-transition" class="pa-4">
         <router-view></router-view>
       </v-col>

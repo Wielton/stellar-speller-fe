@@ -1,18 +1,23 @@
 <script setup>
-import { onBeforeMount } from "vue";
+import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useTestStore } from "../stores/test";
+import { useWordStore } from "../stores/words";
 
 // The test list will be fetched from the /api/test endpoint and will grab the last group_id and all joined words
 const { testWords, answersToAdd } = storeToRefs(useTestStore());
 const { filterTestWords, addWordToGroup, submitAnswers } = useTestStore();
-onBeforeMount(() => {
-  filterTestWords();
-  if (answersToAdd.length >= 1) {
-    for (let i = 0; i < answersToAdd.length; i++) {
-      for (let j = 0; j < testWords.length; j++) {
-        if (answersToAdd[i].wordId == testWords[j].wordId) {
-          testWords.pop(testWords[j]);
+const { userWords } = storeToRefs(useWordStore());
+onMounted(() => {
+  console.log(userWords.value);
+  if (userWords.value) {
+    filterTestWords();
+    if (answersToAdd.length >= 1) {
+      for (let i = 0; i < answersToAdd.length; i++) {
+        for (let j = 0; j < testWords.length; j++) {
+          if (answersToAdd[i].wordId == testWords[j].wordId) {
+            testWords.pop(testWords[j]);
+          }
         }
       }
     }
@@ -36,12 +41,14 @@ function removeWord(arr, item) {
 </script>
 <template>
   <v-container fluid class="fill-height">
-    <v-row align="center" justify="center">
+    <v-row v-if="testWords.value">
+      <v-col cols="12"><h1>Your test words will show up here</h1></v-col>
+    </v-row>
+    <v-row align="center" justify="center" v-else>
       <v-col cols="12" sm="6" md="6" lg="6">
         <!-- Test List from current week -->
 
         <v-list
-          v-if="testWords.length"
           bg-color="transparent"
           rounded
           class="pa-1"

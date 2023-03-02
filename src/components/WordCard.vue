@@ -12,7 +12,7 @@ onUpdated(() => {
   filterStrongAndWeakWords();
 });
 defineProps({
-  word: { type: Object, default: () => {} },
+  word: Object,
 });
 </script>
 <template>
@@ -38,8 +38,8 @@ defineProps({
         <v-divider color="#5c6bc0"></v-divider>
         <v-card-text
           class="text-indigo-lighten-2 d-flex justify-center"
-          v-for="(correctAnswer, index) in word.correctAnswers"
-          :key="index"
+          v-for="(correctAnswer, idx) in word.correctAnswers"
+          :key="idx"
           :correctAnswer="correctAnswer"
           >{{ correctAnswer }}</v-card-text
         >
@@ -52,8 +52,8 @@ defineProps({
         <v-divider color="#5c6bc0"></v-divider>
         <v-card-text
           class="text-indigo-lighten-2 d-flex justify-center"
-          v-for="(wrongAnswer, index) in word.wrongAnswers"
-          :key="index"
+          v-for="(wrongAnswer, idx) in word.wrongAnswers"
+          :key="idx"
           :wrongAnswer="wrongAnswer"
           >{{ wrongAnswer }}</v-card-text
         >
