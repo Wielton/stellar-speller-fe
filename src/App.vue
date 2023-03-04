@@ -1,6 +1,6 @@
 <script setup>
 import { storeToRefs } from "pinia";
-import { onBeforeMount, onMounted } from "vue";
+import { onBeforeMount } from "vue";
 import router from "@/router";
 import { RouterView } from "vue-router";
 import { useUserStore } from "./stores/user";
@@ -9,16 +9,15 @@ const { user, userSession } = storeToRefs(useUserStore());
 const { getAuthentication } = useUserStore();
 
 onBeforeMount(() => {
-  console.log(userSession.value, user.value.userId);
   if (!userSession.value) {
     router.push({ name: "home" });
   } else if (userSession.value && !user.value.userId) {
     getAuthentication();
   }
 });
-onMounted(() => {
-  console.log(user.value.userId);
-});
+// onMounted(() => {
+//   console.log(user.value.userId);
+// });
 </script>
 
 <template>

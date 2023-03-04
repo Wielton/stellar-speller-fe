@@ -7,6 +7,7 @@ import WordCard from "../components/WordCard.vue";
 
 const { getAllAnswers } = useAnswerStore();
 const { getUserWords } = useWordStore();
+const { userWords } = storeToRefs(useWordStore());
 const { joinedAnswersAndWords } = storeToRefs(useAnswerStore());
 
 // const allWords = joinedAnswersAndWords.value;
@@ -58,6 +59,8 @@ const { joinedAnswersAndWords } = storeToRefs(useAnswerStore());
 onMounted(async () => {
   await getUserWords();
   await getAllAnswers();
+  console.log("Word store: ", userWords.value);
+  console.log("Answer store: ", joinedAnswersAndWords.value);
 });
 </script>
 <template>

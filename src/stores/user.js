@@ -3,6 +3,8 @@ import router from "@/router";
 import axios from "axios";
 import cookies from "vue-cookies";
 import { useAlertStore } from "./alert";
+import { useWordStore } from "./words";
+import { useAnswerStore } from "./answers";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
@@ -88,6 +90,8 @@ export const useUserStore = defineStore("user", {
         });
     },
     async logout() {
+      const wordStore = useWordStore();
+      const answerStore = useAnswerStore();
       await axios
         .request({
           url: import.meta.env.VITE_API_URL + "user-session",
@@ -98,8 +102,9 @@ export const useUserStore = defineStore("user", {
         })
         .then(() => {
           cookies.remove("sessionToken");
-          this.user.username = null;
-          this.user.userId = null;
+          wordStore.$reset();
+          answerStore.$reset();
+          this.$reset();
           router.push({ name: "home" });
         })
         .catch((error) => {

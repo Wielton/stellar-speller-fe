@@ -41,47 +41,37 @@ function submitWordGroup(wordsToAdd) {
             bg-color="indigo-lighten-5"
             color="indigo-darken-2"
             v-model="word"
-            ><template v-slot:append
+            ><template v-slot:append-inner
               ><v-icon
                 @click="addWord(word)"
                 icon="mdi-plus"
-                color="indigo-lighten-5"
+                color="indigo"
               ></v-icon></template
           ></v-text-field>
         </v-form>
       </v-col>
       <v-col v-if="wordsToAdd.length" cols="12" sm="6" md="6" lg="6">
-        <v-list
-          bg-color="#667bc7ff"
-          color="#89acd2ff"
-          rounded
-          class="pa-2"
-          min-height="250px"
-          density="compact"
-        >
-          <v-toolbar color="transparent">
-            <v-toolbar-title color="indigo-lighten-2"
-              >Words to add:</v-toolbar-title
-            >
-            <v-spacer></v-spacer>
-            <v-btn
-              v-if="wordsToAdd.length >= 1"
-              size="medium"
-              icon="mdi-plus"
-              flat
-              @click="submitWordGroup(wordsToAdd)"
-            ></v-btn>
-          </v-toolbar>
-          <v-list-item
+        <v-row align="center" justify="center">
+          <v-col
+            cols="6"
             v-for="word in wordsToAdd"
             :key="word.index"
             :word="word"
-            lines="one"
-            density="compact"
           >
-            {{ word }}
-          </v-list-item>
-        </v-list>
+            <v-card>{{ word }} </v-card>
+          </v-col>
+        </v-row>
+
+        <v-row align="center" justify="center">
+          <v-btn
+            v-if="wordsToAdd.length >= 1"
+            color="indigo"
+            size="large"
+            flat
+            @click="submitWordGroup(wordsToAdd)"
+            >Submit Words</v-btn
+          >
+        </v-row>
       </v-col>
       <v-col v-else>
         <div class="text-center text-subtitle-1 text-indigo-lighten-1">
@@ -91,9 +81,3 @@ function submitWordGroup(wordsToAdd) {
     </v-row>
   </v-container>
 </template>
-<style lang="css">
-.btn {
-  background-color: #282828;
-  color: #fafafa;
-}
-</style>

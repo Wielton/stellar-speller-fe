@@ -8,10 +8,10 @@ import { useWordStore } from "../stores/words";
 const { testWords, answersToAdd } = storeToRefs(useTestStore());
 const { filterTestWords, addWordToGroup, submitAnswers } = useTestStore();
 const { userWords } = storeToRefs(useWordStore());
-onMounted(() => {
-  console.log(userWords.value);
-  if (userWords.value) {
-    filterTestWords();
+onMounted(async () => {
+  console.log(userWords.length);
+  if (userWords.length) {
+    await filterTestWords();
     if (answersToAdd.length >= 1) {
       for (let i = 0; i < answersToAdd.length; i++) {
         for (let j = 0; j < testWords.length; j++) {

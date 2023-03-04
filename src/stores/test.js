@@ -36,7 +36,7 @@ export const useTestStore = defineStore("test", {
             return { item1 }
         },
         // Create a function to filter userWords
-        filterTestWords() {
+        async filterTestWords() {
             // const { weakWords } = useAnswerStore();
             const { userWords } = useWordStore();
             // const extraWords = this.getRandomWeakWords(weakWords)

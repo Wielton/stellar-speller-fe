@@ -1,13 +1,23 @@
 <script setup>
+import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "../stores/user";
+import { useWordStore } from "../stores/words";
+import { useAnswerStore } from "../stores/answers";
 import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiStarOutline } from "@mdi/js";
 
 const { logout } = useUserStore();
 const { user } = storeToRefs(useUserStore());
-
+const wordStore = useWordStore();
+const answerStore = useAnswerStore();
 const starOutline = mdiStarOutline;
+
+onMounted(() => {
+  console.log(user.value);
+  console.log("Word store: ", wordStore.userWords);
+  console.log("Answer store: ", answerStore.joinedAnswersAndWords);
+});
 </script>
 
 <template>
@@ -19,13 +29,13 @@ const starOutline = mdiStarOutline;
         >
           <span
             ><svg-icon
-              class="star-icon"
+              class="star-icon-1"
               type="mdi"
               :path="starOutline"
             ></svg-icon></span
           >Stellar Speller<span
             ><svg-icon
-              class="star-icon"
+              class="star-icon-2"
               type="mdi"
               :path="starOutline"
             ></svg-icon
@@ -64,10 +74,17 @@ const starOutline = mdiStarOutline;
   height: 100%;
   width: 100%;
 }
-.star-icon {
+.star-icon-1,
+.star-icon-2 {
   color: #fff176;
   width: 50px;
   height: 50px;
+}
+.star-icon-1 {
+  rotate: 45deg;
+}
+.star-icon-2 {
+  rotate: 90deg;
 }
 @media screen and (min-width: 500px) {
   .star-icon {
