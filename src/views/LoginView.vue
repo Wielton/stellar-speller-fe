@@ -1,10 +1,12 @@
 <script setup>
+import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "../stores/user";
 
 const userStore = useUserStore();
 const { loginForm } = storeToRefs(userStore);
 const { login } = userStore;
+const show = ref(false);
 </script>
 <template>
   <v-container fluid class="fill-height">
@@ -27,11 +29,13 @@ const { login } = userStore;
             <v-text-field
               variant="solo"
               v-model="loginForm.password"
-              type="password"
+              :type="show ? 'text' : 'password'"
               label="Password"
               bg-color="indigo-lighten-5"
               color="indigo-darken-2"
               placeholder="Enter your password"
+              :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+              @click:append-inner="show = !show"
               required
             ></v-text-field>
           </v-col>

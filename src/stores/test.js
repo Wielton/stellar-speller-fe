@@ -10,7 +10,15 @@ import { useWordStore } from "./words";
 //  so
 export const useTestStore = defineStore("test", {
     state: () => ({
-        testWords: [
+        currentWords: [
+            {
+                groupId: null,
+                word: null,
+                wordId: null,
+                answer: null,
+            },
+        ],
+        pastWords: [
             {
                 groupId: null,
                 word: null,
@@ -26,17 +34,26 @@ export const useTestStore = defineStore("test", {
     }),
     getters: {
         // create a getter for the wordsToAdd(state) to update when a word is added to it
+        
     },
     actions: {
         // Function to add a couple random weak words to the practice test module
         getRandomWeakWords(arr) {
-            const ranIndex = Math.floor(Math.random() * arr.length);
-            const item1 = arr[ranIndex];
-            arr.pop(item1)
-            return { item1 }
+            if(arr.length <= 2) {
+                return arr;
+            }else if(arr.length >= 3 && arr.length <= 10) {
+                const ranWords = [];
+                for(let i = 0; i < arr.length; i++) {
+                    const ranIndex = Math.floor(Math.random() * arr.length);
+                    ranWords.push(arr[ranIndex]);
+                    arr.pop(arr[ranIndex])
+                }
+                return ranWords;
+            }
+            
         },
         // Create a function to filter userWords
-        async filterTestWords() {
+        currentTestWords() {
             // const { weakWords } = useAnswerStore();
             const { userWords } = useWordStore();
             // const extraWords = this.getRandomWeakWords(weakWords)
@@ -46,12 +63,24 @@ export const useTestStore = defineStore("test", {
             // Get the lastElement.groupId
             const lastElementGroupId = lastElement.groupId;
             // Get all elements from userWords that match the groupId by filter
-            this.testWords = userWords.filter(
+            this.currentWords = userWords.filter(
                 (word) => word.groupId == lastElementGroupId
             );
             // this.testWords += extraWords
         },
+        pastTestWords(id) {
+            const { userWords } = useWordStore();
+            this.pastWords = userWords.filter(
+                (word) => word.groupId == id
+            );
+            console.log("Past words: " ,this.pastWords);
+        },
+        randomTestWords() {
 
+        },
+        fullTest() {
+        
+        },
         // This function is in words.js
         addWordToGroup(word, wordId) {
             const wordData = {

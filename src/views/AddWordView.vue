@@ -41,6 +41,7 @@ function submitWordGroup(wordsToAdd) {
             bg-color="indigo-lighten-5"
             color="indigo-darken-2"
             v-model="word"
+            clearable
             ><template v-slot:append-inner
               ><v-icon
                 @click="addWord(word)"

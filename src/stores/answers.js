@@ -14,6 +14,12 @@ export const useAnswerStore = defineStore("answers", {
         evenStrengthWords: [],
         errMessage: null,
     }),
+    getters: {
+        getCurrentTestWords: (state) => {
+            return state.wordGroups[-1];
+        },
+        
+    },
     actions: {
         async getAllAnswers() {
             await axios
@@ -33,6 +39,20 @@ export const useAnswerStore = defineStore("answers", {
                     this.errMessage = error;
                 });
         },
+        groupedArray() {
+            this.wordGroups = this.joinedAnswersAndWords.reduce((acc, cur) => {
+            console.log("acc: ", acc, "cur", cur);
+            const index = acc.findIndex((group) => group[0].groupId === cur.groupId);
+                if (index === -1) {
+                    acc.push([cur]);
+                    console.log("acc: ", acc, "cur", cur);
+                } else {
+                    acc[index].push(cur);
+                    console.log("acc: ", acc, "cur", cur);
+                }
+                console.log("acc array: ",acc);
+                return acc;
+            }, [])},
         filterWords() {
             //     // This function will calculate all answers into correct or wrong arrays
             //     //
